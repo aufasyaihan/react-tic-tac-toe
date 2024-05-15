@@ -19,6 +19,7 @@ export default function Player({ name, symbol }) {
             type="text"
             value={playerName}
             onChange={handleChange}
+            required
           />
         ) : (
           <span className="player-name">{playerName}</span>
