@@ -3,7 +3,7 @@ import GameBoard from "./components/GameBoard";
 import { useState } from "react";
 import Log from "./components/Log";
 
-function currPlayer(gameTurns) {
+function deriveActivePlayer(gameTurns) {
   let currPlayer = "X";
 
   if (gameTurns.length > 0 && gameTurns[0].player === "X") {
@@ -16,12 +16,12 @@ function currPlayer(gameTurns) {
 function App() {
   // const [activePlayer, setActivePlayer] = useState('X');
   const [gameTurns, setGameTurns] = useState([]);
-  const activePlayer = currPlayer(gameTurns);
+  const activePlayer = deriveActivePlayer(gameTurns);
 
   function handleSelectSquare(rowIndex, colIndex) {
     // setActivePlayer((currPlayer) => currPlayer === 'X' ? 'O' : 'X');
     setGameTurns((prevGameTurns) => {
-      const currPlayer = currPlayer(prevGameTurns);
+      const currPlayer = deriveActivePlayer(prevGameTurns);
       const updatedTurns = [
         { square: { row: rowIndex, col: colIndex }, player: currPlayer },
         ...prevGameTurns,
