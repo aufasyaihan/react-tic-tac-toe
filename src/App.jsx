@@ -5,7 +5,12 @@ import { useState } from "react";
 import Log from "./components/Log";
 import { WINNING_COMBINATIONS } from "./winning-combinations";
 
-const initialGameBoard = [
+const PLAYERS = {
+  X: "Player 1",
+  O: "Player 2",
+}
+
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
@@ -21,48 +26,51 @@ function deriveActivePlayer(gameTurns) {
 }
 
 function App() {
-  // const [activePlayer, setActivePlayer] = useState('X');
-  const [players, setPlayers] = useState({
-    X: "Player 1",
-    O: "Player 2",
-  });
-  
+  const [players, setPlayers] = useState(PLAYERS);
+
   const [gameTurns, setGameTurns] = useState([]);
   // const [haveWinner, setHaveWinner] = useState(false); // its redundant
   const activePlayer = deriveActivePlayer(gameTurns);
-
-  let gameBoard = [...initialGameBoard.map((item) => [...item])];
-
-  for (const turn of gameTurns) {
-    const { square, player } = turn;
-    const { row, col } = square;
-
-    gameBoard[row][col] = player;
-  }
-
-  let winner;
-
-  for (const combinations of WINNING_COMBINATIONS) {
-    const firstSquareSymbol =
-      gameBoard[combinations[0].row][combinations[0].column];
-    const secondSquareSymbol =
-      gameBoard[combinations[1].row][combinations[1].column];
-    const thirdSquareSymbol =
-      gameBoard[combinations[2].row][combinations[2].column];
-
-    if (
-      firstSquareSymbol &&
-      firstSquareSymbol === secondSquareSymbol &&
-      firstSquareSymbol === thirdSquareSymbol
-    ) {
-      winner = players[firstSquareSymbol]; // atau players.firstSquareSymbol jg bisa
-    }
-  }
-
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard, players);
   const isDraw = gameTurns.length === 9 && !winner;
 
+  function deriveGameBoard(gameTurns) {
+    let gameBoard = [...INITIAL_GAME_BOARD.map((item) => [...item])];
+
+    for (const turn of gameTurns) {
+      const { square, player } = turn;
+      const { row, col } = square;
+
+      gameBoard[row][col] = player;
+    }
+    return gameBoard;
+  }
+
+  function deriveWinner(gameBoard, players) {
+    let winner;
+
+    for (const combinations of WINNING_COMBINATIONS) {
+      const firstSquareSymbol =
+        gameBoard[combinations[0].row][combinations[0].column];
+      const secondSquareSymbol =
+        gameBoard[combinations[1].row][combinations[1].column];
+      const thirdSquareSymbol =
+        gameBoard[combinations[2].row][combinations[2].column];
+
+      if (
+        firstSquareSymbol &&
+        firstSquareSymbol === secondSquareSymbol &&
+        firstSquareSymbol === thirdSquareSymbol
+      ) {
+        winner = players[firstSquareSymbol]; // atau players.firstSquareSymbol jg bisa
+      }
+    }
+    return winner;
+  }
+  
+
   function handleSelectSquare(rowIndex, colIndex) {
-    // setActivePlayer((currPlayer) => currPlayer === 'X' ? 'O' : 'X');
     setGameTurns((prevGameTurns) => {
       const currPlayer = deriveActivePlayer(prevGameTurns);
       const updatedTurns = [

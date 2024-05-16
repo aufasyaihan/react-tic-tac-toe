@@ -13,7 +13,7 @@ export default function Player({ name, symbol, isActive, onChangeName }) {
   }
 
   return (
-    <li className={isActive ? 'active' : undefined}>
+    <li className={isActive ? "active" : undefined}>
       <span className="player">
         {isEditing ? (
           <input

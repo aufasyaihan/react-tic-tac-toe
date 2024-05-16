@@ -4,7 +4,7 @@ export default function Log({ turns, currPlayer }) {
       {turns.map((turn) => (
         <li
           key={`${turn.square.row}${turn.square.col}`}
-          className={currPlayer === turn.player ? 'highlighted' : undefined}
+          className={currPlayer === turn.player ? "highlighted" : undefined}
         >
           {turn.player} selected {turn.square.row}, {turn.square.col}
         </li>
